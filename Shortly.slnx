@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/tests/">
+    <Project Path="tests/ShortLi.ArchitectureTests/ShortLi.ArchitectureTests.csproj" />
+    <Project Path="tests/ShortLi.IntegrationTests/ShortLi.IntegrationTests.csproj" />
+    <Project Path="tests/ShortLi.UnitTests/ShortLi.UnitTests.csproj" />
+  </Folder>
+</Solution>
