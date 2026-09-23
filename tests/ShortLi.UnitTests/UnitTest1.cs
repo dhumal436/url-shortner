@@ -1,4 +1,5 @@
-﻿namespace ShortLi.UnitTests;
+﻿
+namespace ShortLi.UnitTests;
 
 public class UnitTest1
 {

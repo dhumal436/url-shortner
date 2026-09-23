@@ -1,4 +1,10 @@
 <Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ShortLi.Api/ShortLi.Api.csproj" />
+    <Project Path="src/ShortLi.Application/ShortLi.Application.csproj" />
+    <Project Path="src/ShortLi.Domain/ShortLi.Domain.csproj" />
+    <Project Path="src/ShortLi.Infrastructure/ShortLi.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/ShortLi.ArchitectureTests/ShortLi.ArchitectureTests.csproj" />
     <Project Path="tests/ShortLi.IntegrationTests/ShortLi.IntegrationTests.csproj" />
