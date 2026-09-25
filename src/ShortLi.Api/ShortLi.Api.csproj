@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ShortLi.Application\ShortLi.Application.csproj" />
     <ProjectReference Include="..\ShortLi.Infrastructure\ShortLi.Infrastructure.csproj" />
+    <ProjectReference Include="..\ShortLi.Contracts\ShortLi.Contracts.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

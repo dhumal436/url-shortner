@@ -1,0 +1,2 @@
+use base62: [a-zA-Z0-9] = 62 characters. Why not base64? Because + and / are awkward in URLs (encoding issues, ugly copy-paste)
+pick 7-8 chars "to be safe" without doing this math, and end up with URLs that look unnecessarily ugly. Longer isn't safer if 6 already gives you 50+ years

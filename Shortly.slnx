@@ -2,6 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/ShortLi.Api/ShortLi.Api.csproj" />
     <Project Path="src/ShortLi.Application/ShortLi.Application.csproj" />
+    <Project Path="src/ShortLi.Contracts/ShortLi.Contracts.csproj" />
     <Project Path="src/ShortLi.Domain/ShortLi.Domain.csproj" />
     <Project Path="src/ShortLi.Infrastructure/ShortLi.Infrastructure.csproj" />
   </Folder>
