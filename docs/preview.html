@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="ShortLink production-grade URL shortener engineering documentation" />
+<title>ShortLink Engineering Documentation</title>
+<style>
+:root{--bg:#0b1020;--panel:#11182b;--panel2:#0f1526;--border:#25304a;--text:#e8edf7;--muted:#9aa6bd;--accent:#7aa2ff;--code:#0a0f1d;--success:#6ed5a3;--warning:#f3c96b;--danger:#f18484}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.65}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.layout{display:flex;min-height:100vh}aside{width:300px;position:fixed;left:0;top:0;bottom:0;overflow-y:auto;border-right:1px solid var(--border);background:linear-gradient(180deg,#0e1425,#0a1020);padding:22px 16px;z-index:20}.brand{display:flex;align-items:center;gap:12px;padding:4px 10px 18px;border-bottom:1px solid var(--border);margin-bottom:14px}.brand-mark{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),#a181ff);color:#071021;font-weight:900}.brand h1{margin:0;font-size:17px}.brand span{display:block;font-size:12px;color:var(--muted)}nav ul{list-style:none;margin:0;padding:0}nav li{margin:2px 0}.group-title{color:#6f7c95;text-transform:uppercase;letter-spacing:.11em;font-size:11px;font-weight:800;padding:14px 10px 6px}nav a{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;color:#bac4d9;font-size:14px}nav a:hover{background:#151e34;color:#fff;text-decoration:none}nav a.active{background:rgba(122,162,255,.14);color:#fff;box-shadow:inset 3px 0 0 var(--accent)}nav .sub a{padding-left:28px;font-size:13px;color:#8f9bb2}
+.content-wrap{margin-left:300px;width:calc(100% - 300px)}main{max-width:1100px;margin:0 auto;padding:42px 42px 80px}.topbar{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:12px 0;background:linear-gradient(180deg,var(--bg) 75%,rgba(11,16,32,0));backdrop-filter:blur(6px)}.crumb{font-size:12px;color:var(--muted)}.pill{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border:1px solid var(--border);border-radius:999px;color:#b9c3d8;font-size:12px;background:#10172a}
+section{scroll-margin-top:84px;margin:66px 0}section:first-of-type{margin-top:28px}h2{font-size:28px;line-height:1.2;margin:0 0 18px}h3{font-size:19px;margin:28px 0 10px}p{color:#cad2e0}.hero{padding:34px;border:1px solid var(--border);border-radius:18px;background:radial-gradient(500px 220px at 10% 0%,rgba(122,162,255,.13),transparent 60%),linear-gradient(180deg,#10192d,#0e1527);box-shadow:0 12px 40px rgba(0,0,0,.28)}.hero h2{font-size:40px;max-width:800px}.hero .lede{font-size:17px;max-width:840px;color:#aeb8cb}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:22px}.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px}.card strong{display:block;margin-bottom:6px}.card small{color:var(--muted)}.toc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.toc-card{display:block;padding:15px 16px;border:1px solid var(--border);border-radius:12px;background:#0f1729;color:var(--text)}.toc-card:hover{border-color:#40537e;text-decoration:none}.toc-card span{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.diagram{overflow:auto;background:var(--code);border:1px solid var(--border);border-radius:12px;padding:18px;margin:16px 0}pre{margin:0;color:#d4dded;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}code{font:13px ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;background:#131c30;border:1px solid #23304a;padding:2px 5px;border-radius:5px}.table-wrap{overflow:auto;border:1px solid var(--border);border-radius:12px;margin:16px 0}table{width:100%;border-collapse:collapse;min-width:620px}th,td{padding:11px 13px;border-bottom:1px solid var(--border);text-align:left}th{background:#111a2d;color:#dbe4f5;font-size:13px}td{color:#bfc9db;font-size:13px}tr:last-child td{border-bottom:none}.callout{padding:14px 16px;border-left:3px solid var(--accent);background:#10182b;border-radius:0 9px 9px 0;margin:16px 0;color:#cbd5e7}.warning{border-left-color:var(--warning)}.success{border-left-color:var(--success)}.danger{border-left-color:var(--danger)}.adr{border:1px solid var(--border);border-radius:12px;margin:12px 0;background:#0f1729}.adr summary{cursor:pointer;list-style:none;padding:14px 16px;font-weight:700}.adr summary::-webkit-details-marker{display:none}.adr summary:before{content:"▸";margin-right:9px;color:var(--accent)}.adr[open] summary:before{content:"▾"}.adr-body{padding:0 16px 16px;color:#bcc7da}.status{display:inline-block;padding:3px 7px;border-radius:999px;font-size:11px;border:1px solid var(--border);margin-left:8px;color:#aeb9cd}.footer{margin-top:90px;padding-top:18px;border-top:1px solid var(--border);color:#74819a;font-size:12px}.mobile-toggle{display:none;position:fixed;top:12px;left:12px;z-index:30;border:1px solid var(--border);background:#11182b;color:#fff;border-radius:9px;width:40px;height:40px;font-size:20px}
+@media(max-width:900px){aside{transform:translateX(-100%);transition:.2s ease}aside.open{transform:translateX(0)}.content-wrap{margin-left:0;width:100%}.mobile-toggle{display:block}main{padding:42px 20px 60px}.topbar{padding-left:52px}.cards{grid-template-columns:1fr}.toc-grid{grid-template-columns:1fr}.hero h2{font-size:32px}}
+</style>
+</head>
+<body>
+<button class="mobile-toggle" aria-label="Toggle navigation" onclick="toggleNav()">☰</button>
+<div class="layout">
+<aside id="sidebar">
+<div class="brand"><div class="brand-mark">↗</div><div><h1>ShortLink</h1><span>Engineering Documentation</span></div></div>
+<nav id="nav"><ul>
+<li class="group-title">Overview</li><li><a href="#overview">Introduction</a></li><li><a href="#project-structure">Project Structure</a></li>
+<li class="group-title">Design</li><li><a href="#requirements">Requirements</a></li><li><a href="#architecture">Architecture</a></li><li><a href="#api">API Design</a></li><li><a href="#database">Database Design</a></li><li><a href="#scaling">Scaling</a></li>
+<li class="group-title">Architecture Decisions</li>
+<li class="sub"><a href="#adr-001">ADR-001 Modular Monolith</a></li><li class="sub"><a href="#adr-002">ADR-002 PostgreSQL</a></li><li class="sub"><a href="#adr-003">ADR-003 Short Code</a></li><li class="sub"><a href="#adr-004">ADR-004 Redis</a></li><li class="sub"><a href="#adr-005">ADR-005 Async Analytics</a></li><li class="sub"><a href="#adr-006">ADR-006 Concurrency</a></li><li class="sub"><a href="#adr-007">ADR-007 Rate Limiting</a></li><li class="sub"><a href="#adr-008">ADR-008 Outbox</a></li>
+<li class="group-title">Implementation Path</li><li><a href="#roadmap">Learning Roadmap</a></li><li><a href="#principles">Engineering Principles</a></li>
+</ul></nav>
+</aside>
+<div class="content-wrap"><main>
+<div class="topbar"><div class="crumb">ShortLink / Documentation</div><div class="pill">.NET 10 • PostgreSQL • Redis • RabbitMQ</div></div>
+
+<section id="overview"><div class="hero"><div class="pill">Production-grade learning project</div><h2>ShortLink Engineering Documentation</h2><p class="lede">A deliberately evolving URL-shortener platform used to learn modern .NET and system design: API design, relational modeling, caching, concurrency, asynchronous processing, observability, load testing, and horizontal scaling.</p></div><div class="cards"><div class="card"><strong>Start simple</strong><small>Modular monolith + PostgreSQL before distributed complexity.</small></div><div class="card"><strong>Measure first</strong><small>Add Redis, queues, replicas, and other components because a real constraint justifies them.</small></div><div class="card"><strong>Document decisions</strong><small>Every meaningful architecture choice gets an ADR with trade-offs.</small></div></div><h3>How to use this documentation</h3><p>Build the system in stages. Revisit the architecture after each stage, capture what changed, and record the reasoning. The goal is not to manufacture a giant diagram on day one. The goal is to understand why each piece exists.</p><div class="toc-grid"><a class="toc-card" href="#requirements">Requirements<span>Functional and non-functional targets</span></a><a class="toc-card" href="#architecture">Architecture<span>Evolution from a simple API to distributed components</span></a><a class="toc-card" href="#api">API Design<span>Initial endpoints and contracts</span></a><a class="toc-card" href="#database">Database Design<span>Entities, constraints, indexes</span></a><a class="toc-card" href="#scaling">Scaling<span>Traffic, caching, queues, replicas, partitioning</span></a><a class="toc-card" href="#roadmap">Roadmap<span>Implementation and learning sequence</span></a></div></section>
+
+<section id="project-structure"><h2>Project Structure</h2><p>Recommended solution layout for the learning project:</p><div class="diagram"><pre>ShortLink/
+├── ShortLink.slnx
+│
+├── src/
+│   ├── ShortLink.Api/
+│   ├── ShortLink.Application/
+│   ├── ShortLink.Domain/
+│   └── ShortLink.Infrastructure/
+│
+├── tests/
+│   ├── ShortLink.UnitTests/
+│   ├── ShortLink.IntegrationTests/
+│   └── ShortLink.ArchitectureTests/
+│
+├── docs/
+│   ├── requirements.md
+│   ├── architecture.md
+│   ├── api.md
+│   ├── database.md
+│   ├── scaling.md
+│   └── adr/
+│
+└── README.md</pre></div><h3>Dependency direction</h3><div class="diagram"><pre>ShortLink.Api
+      │
+      ▼
+ShortLink.Application
+      │
+      ▼
+ShortLink.Domain
+
+ShortLink.Infrastructure
+      ├──► ShortLink.Application
+      └──► ShortLink.Domain
+
+Rule: Domain depends on nothing.</pre></div><div class="callout success"><strong>Keep the dependency direction explicit.</strong><br />The architecture should make accidental coupling difficult, rather than hoping every future developer remembers the rule.</div></section>
+
+<section id="requirements"><h2>Requirements</h2><h3>Functional requirements</h3><div class="table-wrap"><table><thead><tr><th>ID</th><th>Requirement</th><th>Initial Phase</th></tr></thead><tbody><tr><td>FR-01</td><td>User can create a short URL.</td><td>Phase 1</td></tr><tr><td>FR-02</td><td>User can redirect from a short code to the original URL.</td><td>Phase 1</td></tr><tr><td>FR-03</td><td>User can inspect a created link.</td><td>Phase 1</td></tr><tr><td>FR-04</td><td>User can disable/delete a link.</td><td>Phase 1</td></tr><tr><td>FR-05</td><td>User can optionally choose a custom alias.</td><td>Phase 2+</td></tr><tr><td>FR-06</td><td>User can set expiration.</td><td>Phase 2+</td></tr><tr><td>FR-07</td><td>User can view click statistics.</td><td>Phase 4+</td></tr><tr><td>FR-08</td><td>User authentication and ownership.</td><td>Phase 2</td></tr></tbody></table></div><h3>Initial non-functional targets</h3><div class="table-wrap"><table><thead><tr><th>Metric</th><th>Target</th><th>Purpose</th></tr></thead><tbody><tr><td>Total URLs</td><td>10 million</td><td>Realistic indexing and storage discussions</td></tr><tr><td>Create throughput</td><td>100 req/s</td><td>Write-path baseline</td></tr><tr><td>Redirect throughput</td><td>1,000 req/s</td><td>Read-heavy baseline</td></tr><tr><td>Availability</td><td>99.9%</td><td>Initial production target</td></tr><tr><td>Redirect p95</td><td>&lt; 100 ms</td><td>User-visible latency target</td></tr></tbody></table></div></section>
+
+<section id="architecture"><h2>Architecture</h2><h3>Stage 1: Basic system</h3><div class="diagram"><pre>Client
+   │
+   ▼
+ASP.NET Core API
+   │
+   ▼
+PostgreSQL</pre></div><h3>Stage 2: Cache the read path</h3><div class="diagram"><pre>Client
+   │
+   ▼
+ASP.NET Core
+   │
+   ├──── Redis
+   │
+   └──── PostgreSQL</pre></div><h3>Stage 3: Horizontal API scaling</h3><div class="diagram"><pre>                Load Balancer
+                       │
+            ┌──────────┼──────────┐
+            ▼          ▼          ▼
+          API-1      API-2      API-3
+            │          │          │
+            └──────────┼──────────┘
+                       │
+                     Redis
+                       │
+                  PostgreSQL</pre></div><h3>Stage 4: Asynchronous analytics</h3><div class="diagram"><pre>Redirect request
+      │
+      ├──────────────► Redis / PostgreSQL ───► HTTP redirect
+      │
+      └──────────────► Message Queue
+                           │
+                           ▼
+                      Analytics Worker
+                           │
+                           ▼
+                      Analytics DB</pre></div><div class="callout warning">Do not start with microservices, Kafka, Kubernetes, or a dozen infrastructure products. Introduce complexity only when it solves a demonstrated problem.</div></section>
+
+<section id="api"><h2>API Design</h2><h3>Initial endpoints</h3><div class="table-wrap"><table><thead><tr><th>Method</th><th>Route</th><th>Purpose</th></tr></thead><tbody><tr><td>POST</td><td><code>/api/links</code></td><td>Create short URL</td></tr><tr><td>GET</td><td><code>/{code}</code></td><td>Resolve short URL and redirect</td></tr><tr><td>GET</td><td><code>/api/links/{id}</code></td><td>Read link metadata</td></tr><tr><td>DELETE</td><td><code>/api/links/{id}</code></td><td>Disable/remove link</td></tr></tbody></table></div><h3>Create request</h3><div class="diagram"><pre>POST /api/links
+Content-Type: application/json
+
+{
+  "url": "https://example.com/very/long/url"
+}</pre></div><h3>Create response</h3><div class="diagram"><pre>{
+  "id": "12345",
+  "code": "aB72xK",
+  "shortUrl": "https://short.myapp.in/aB72xK"
+}</pre></div><h3>Later API capabilities</h3><p>Authentication, custom aliases, expiration, API keys, quotas, teams, custom domains, QR codes, analytics, abuse controls, and webhooks should be added only after the core redirect path is stable.</p></section>
+
+<section id="database"><h2>Database Design</h2><h3>Initial entities</h3><div class="table-wrap"><table><thead><tr><th>Table</th><th>Core columns</th><th>Notes</th></tr></thead><tbody><tr><td>Users</td><td>Id, Email, PasswordHash, CreatedAt</td><td>Added when authentication is introduced</td></tr><tr><td>Links</td><td>Id, Code, OriginalUrl, CreatedBy, CreatedAt, ExpiresAt, IsActive</td><td>Primary business entity</td></tr><tr><td>LinkClicks</td><td>Id, LinkId, Timestamp, IpAddress, UserAgent, Referrer, Country</td><td>Analytics/event data, introduced later</td></tr></tbody></table></div><h3>Important constraints and indexes</h3><div class="diagram"><pre>Links
+-----
+PK(Id)
+UNIQUE(Code)
+INDEX(ExpiresAt)
+INDEX(CreatedBy)</pre></div><div class="callout">A unique alias must be enforced by the database. An application-level “check then insert” is not enough when multiple requests race concurrently.</div><h3>Database learning topics</h3><p>Normalization, unique constraints, composite indexes, query plans, transactions, isolation levels, connection pooling, and <code>EXPLAIN ANALYZE</code> should all be practiced directly.</p></section>
+
+<section id="scaling"><h2>Scaling Strategy</h2><h3>Read-heavy redirect path</h3><div class="diagram"><pre>GET /aB72xK
+     │
+     ▼
+Cache lookup
+     │
+ ┌───┴────┐
+ │        │
+HIT     MISS
+ │        │
+ ▼        ▼
+Redirect PostgreSQL
+           │
+           ▼
+         Redis
+           │
+           ▼
+       Redirect</pre></div><h3>Concurrency</h3><p>For custom aliases, combine application-level validation with a database <code>UNIQUE(Code)</code> constraint and handle duplicate-key failures cleanly. This protects correctness even when two or more API instances receive the same alias concurrently.</p><h3>Asynchronous work</h3><p>Analytics should not make the user-facing redirect depend on a slow analytics database. Publish an event and process it asynchronously so the critical path stays small.</p><h3>Future scaling topics</h3><div class="table-wrap"><table><thead><tr><th>Topic</th><th>Question to investigate</th></tr></thead><tbody><tr><td>Horizontal scaling</td><td>How do multiple stateless API instances behave?</td></tr><tr><td>Read replicas</td><td>When does database read traffic justify replicas?</td></tr><tr><td>Partitioning</td><td>What dataset growth or access pattern justifies it?</td></tr><tr><td>Distributed IDs</td><td>When is a DB sequence insufficient?</td></tr><tr><td>CDN</td><td>What can safely be cached at the edge?</td></tr><tr><td>Multi-region</td><td>Which consistency and latency trade-offs appear?</td></tr></tbody></table></div></section>
+
+<section id="adr-001"><h2>ADR-001: Modular Monolith</h2><details class="adr" open><summary>Decision <span class="status">Proposed</span></summary><div class="adr-body"><p><strong>Problem:</strong> We need an architecture that supports production-grade structure without creating distributed-system complexity before it is necessary.</p><p><strong>Decision:</strong> Start as a modular monolith with Api, Application, Domain, and Infrastructure projects.</p><p><strong>Why:</strong> Fast development, simple deployment, clear dependency boundaries, and an easier path to learning fundamentals.</p><p><strong>Trade-offs:</strong> Less independent scaling than microservices, but substantially lower operational complexity.</p></div></details></section>
+<section id="adr-002"><h2>ADR-002: PostgreSQL</h2><details class="adr" open><summary>Decision <span class="status">Proposed</span></summary><div class="adr-body"><p><strong>Problem:</strong> We need durable storage with strong constraints, transactions, indexing, and mature tooling.</p><p><strong>Decision:</strong> Use PostgreSQL for the primary relational store.</p><p><strong>Trade-offs:</strong> Excellent consistency and query capabilities, with operational considerations for scaling very large workloads.</p></div></details></section>
+<section id="adr-003"><h2>ADR-003: Short Code Generation</h2><details class="adr" open><summary>Decision <span class="status">Proposed</span></summary><div class="adr-body"><p><strong>Problem:</strong> Short URLs need compact, unique codes that remain practical under concurrency.</p><p><strong>Options:</strong> Random Base62, database ID to Base62, or a distributed ID generator.</p><p><strong>Decision:</strong> Start with a simple approach and benchmark/measure collision behavior before introducing distributed ID infrastructure.</p><p><strong>Key questions:</strong> Code length, collision probability, retry policy, predictability, and whether sequence growth should be externally visible.</p></div></details></section>
+<section id="adr-004"><h2>ADR-004: Redis</h2><details class="adr" open><summary>Decision <span class="status">Proposed</span></summary><div class="adr-body"><p><strong>Problem:</strong> Redirect traffic is much more read-heavy than link creation traffic.</p><p><strong>Decision:</strong> Add Redis as a distributed cache for link resolution.</p><p><strong>Pattern:</strong> Cache-aside with TTL and explicit invalidation when link state changes.</p><p><strong>Trade-offs:</strong> Lower latency and lower database load at the cost of cache invalidation and another operational dependency.</p></div></details></section>
+<section id="adr-005"><h2>ADR-005: Asynchronous Analytics</h2><details class="adr" open><summary>Decision <span class="status">Proposed</span></summary><div class="adr-body"><p><strong>Problem:</strong> Synchronous analytics writes can increase redirect latency and couple the critical path to analytics storage availability.</p><p><strong>Decision:</strong> Emit click events asynchronously and process them with a worker.</p><p><strong>Trade-offs:</strong> Analytics become eventually consistent, but redirect availability and latency are better isolated from analytics failures.</p></div></details></section>
+<section id="adr-006"><h2>ADR-006: Unique Code Concurrency</h2><details class="adr" open><summary>Decision <span class="status">Proposed</span></summary><div class="adr-body"><p><strong>Problem:</strong> Multiple concurrent requests may attempt to create the same custom alias.</p><p><strong>Decision:</strong> Enforce uniqueness in PostgreSQL and handle duplicate-key errors in the application.</p><p><strong>Trade-offs:</strong> The database becomes the final correctness boundary, avoiding race conditions inherent in check-then-insert logic.</p></div></details></section>
+<section id="adr-007"><h2>ADR-007: Rate Limiting</h2><details class="adr" open><summary>Decision <span class="status">Proposed</span></summary><div class="adr-body"><p><strong>Problem:</strong> Public endpoints can be abused for spam, brute force, or resource exhaustion.</p><p><strong>Decision:</strong> Use endpoint-appropriate rate limits, initially partitioned by user and/or IP.</p><p><strong>Example policies:</strong> Link creation 10/minute/user; login 5/minute/IP; redirect access governed by a higher threshold and abuse controls.</p><p><strong>Trade-offs:</strong> Better abuse resistance, but limits must be load-tested to avoid blocking legitimate traffic.</p></div></details></section>
+<section id="adr-008"><h2>ADR-008: Outbox Pattern</h2><details class="adr" open><summary>Decision <span class="status">Proposed</span></summary><div class="adr-body"><p><strong>Problem:</strong> A database transaction can succeed while publishing an event fails, leaving the system inconsistent.</p><p><strong>Decision:</strong> Store the business change and an outbox message in the same database transaction, then publish the message asynchronously.</p><p><strong>Trade-offs:</strong> More reliable event publication with added storage and worker complexity.</p></div></details></section>
+
+<section id="roadmap"><h2>Learning Roadmap</h2><div class="table-wrap"><table><thead><tr><th>Phase</th><th>Build</th><th>Core lessons</th></tr></thead><tbody><tr><td>1</td><td>Basic URL shortener</td><td>ASP.NET Core, DI, EF Core, PostgreSQL, validation, API design</td></tr><tr><td>2</td><td>Authentication</td><td>JWT, claims, authorization, ownership</td></tr><tr><td>3</td><td>Database depth</td><td>Indexes, constraints, query plans, transactions, isolation</td></tr><tr><td>4</td><td>Redis</td><td>Cache-aside, TTL, invalidation, hit ratio</td></tr><tr><td>5</td><td>Concurrency</td><td>Race conditions, idempotency, optimistic concurrency</td></tr><tr><td>6</td><td>Rate limiting</td><td>Protection, partitioning, quotas</td></tr><tr><td>7</td><td>Analytics queue</td><td>Messaging, workers, retries, eventual consistency</td></tr><tr><td>8</td><td>Outbox</td><td>Reliable event publication and failure recovery</td></tr><tr><td>9</td><td>Observability</td><td>Logs, metrics, traces, health checks</td></tr><tr><td>10</td><td>Load testing</td><td>RPS, p95, p99, CPU, memory, DB/Redis behavior</td></tr><tr><td>11</td><td>Docker/deployment</td><td>Containers, environments, CI/CD</td></tr><tr><td>12</td><td>Scale-out architecture</td><td>Load balancing, replicas, distributed systems</td></tr></tbody></table></div></section>
+
+<section id="principles"><h2>Engineering Principles</h2><div class="callout success"><strong>Build the same path multiple times.</strong><br />Compare API → DB, then API → Redis → DB, then multiple API instances, then asynchronous analytics. Measure latency, throughput, failure modes, consistency, cost, and operational complexity.</div><div class="callout"><strong>Every new component needs a reason.</strong><br />Architecture is not a shopping list of technologies. The system should make the pressure visible first.</div><div class="callout warning"><strong>Document trade-offs, not just decisions.</strong><br />The useful question in system design is rarely “What did we pick?” It is “What problem were we solving, what alternatives existed, and what did we give up?”</div></section>
+<div class="footer">ShortLink • Living engineering documentation • Update this document as the implementation evolves.</div>
+</main></div></div>
+<script>
+const sidebar=document.getElementById('sidebar');
+const links=[...document.querySelectorAll('#nav a')];
+const sections=[...document.querySelectorAll('main section[id]')];
+function toggleNav(){sidebar.classList.toggle('open')}
+const observer=new IntersectionObserver(entries=>{const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];if(!visible)return;links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+visible.target.id));},{rootMargin:'-20% 0px -65% 0px',threshold:[0,.25,.5,.75,1]});
+sections.forEach(s=>observer.observe(s));
+links.forEach(a=>a.addEventListener('click',()=>{if(window.innerWidth<=900)sidebar.classList.remove('open')}));
+</script>
+</body>
+</html>
