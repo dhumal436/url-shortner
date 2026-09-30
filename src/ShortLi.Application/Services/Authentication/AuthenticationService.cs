@@ -5,6 +5,11 @@ namespace ShortLi.Application.Services;
 
 public class AuthenticationService : IAuthService
 {
+    IJWTToken _jWTToken;
+    public AuthenticationService(IJWTToken jWTToken)
+    {
+        _jWTToken=jWTToken;
+    }
     public AuthenticationResponse Login(LoginRequest loginRequest)
     {
        return new AuthenticationResponse
@@ -12,7 +17,7 @@ public class AuthenticationService : IAuthService
         new Guid(),
             "dhumal",
            "shubham",
-           ""
+           _jWTToken.GenrateToken(new Guid(), "passwod","email")
        );
     }
 

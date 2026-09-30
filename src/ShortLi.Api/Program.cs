@@ -1,6 +1,7 @@
 
 
 using ShortLi.Application;
+using ShortLi.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.AddApplication();
+    builder.Services.AddInfrastructre();
 }
 var app = builder.Build();
 
